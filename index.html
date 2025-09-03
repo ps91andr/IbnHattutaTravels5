@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ابن حتوتة | رحّالة حول العالم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --primary: #ff7e31; /* Vibrant Orange */
+            --secondary: #ff6d00;
+            --accent: #8b5cf6;
+            --dark-bg: #0a192f;
+            --light-bg: #f8f9fa;
+            --card-bg: #112240;
+            --text-light: #ccd6f6;
+            --text-dark: #343a40;
+            --text-muted: #8892b0;
+            --facebook-blue: #1877F2;
+            --font-family: 'Tajawal', sans-serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: var(--font-family);
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); /* New Gradient Background */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* --- Preloader --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark-bg);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        #preloader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--card-bg);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 0;
+            z-index: 1000;
+            transition: all 0.3s ease-in-out;
+        }
+        .navbar.scrolled {
+            background-color: rgba(17, 34, 64, 0.85);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            padding: 15px 0;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        .nav-links li { margin-right: 35px; }
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-links a:hover::after { width: 100%; }
+        
+        .mobile-menu-btn { display: none; }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            background: url('https://i.ibb.co/4nmCDvdt/Untitled.png') no-repeat center center/cover;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 25, 47, 0.6);
+            z-index: 1;
+        }
+        .hero-content {
+            z-index: 2;
+            transform: translateY(30px);
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.5s;
+        }
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+        .typing-container {
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            height: 40px;
+        }
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 35px;
+            background-color: var(--primary);
+            animation: blink 0.7s infinite;
+        }
+        .hero .description {
+            font-size: 1.2rem;
+            max-width: 650px;
+            margin: 0 auto 3rem auto;
+            color: var(--text-light);
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255, 126, 49, 0.4);
+        }
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(255, 126, 49, 0.5);
+        }
+
+        /* --- Section Styling & Dividers --- */
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+        .section-light {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+        }
+        .section-divider {
+            position: absolute;
+            top: -1px;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            transform: rotate(180deg);
+        }
+        .section-divider svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 120px;
+        }
+        .section-divider .shape-fill { fill: #0f172a; } /* Updated to match new dark bg */
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 60px;
+            position: relative;
+            font-family: 'Cairo', sans-serif;
+        }
+        .section-light .section-title { color: var(--dark-bg); }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 5px;
+        }
+        
+        /* --- About Section --- */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 60px;
+        }
+        .about-text p, .about-text blockquote {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            margin-bottom: 25px;
+            color: var(--text-dark);
+        }
+        .about-text blockquote {
+            border-right: 4px solid var(--primary);
+            padding-right: 20px;
+            font-style: italic;
+            color: #555;
+        }
+        .highlight { color: var(--primary); font-weight: 700; }
+        .about-image {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .about-image:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.3);
+        }
+        .about-image img { width: 100%; display: block; }
+        
+        .achievements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 80px;
+        }
+        .achievement-card {
+            background: white;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid #eee;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .achievement-card:hover { transform: translateY(-10px); }
+        .achievement-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, var(--primary), transparent 30%);
+            animation: achievement-rotate 4s linear infinite; /* Renamed to avoid conflict */
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .achievement-card:hover::before { opacity: 1; }
+        .achievement-card-content {
+            position: relative;
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .achievement-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .achievement-title { font-size: 1.3rem; margin-bottom: 10px; color: var(--text-dark); font-weight: 700; }
+        .achievement-desc { font-size: 1rem; line-height: 1.6; }
+
+        /* --- Journey Stats --- */
+        #journey {
+            padding-bottom: 150px;
+        }
+        .journey-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+            text-align: center;
+        }
+        .stat-number-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            line-height: 1;
+        }
+        .stat-prefix {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-left: 8px;
+        }
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+        .stat-label {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        /* --- START: Styles for Social Profiles Section --- */
+        .profiles-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 60px; /* Space from section title */
+        }
+        .profile-card {
+            border-radius: 16px;
+            color: #fff;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+        }
+        .profile-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+        .profile-card .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            display: block;
+            margin: 0 auto 15px auto;
+        }
+        .profile-card h2 {
+            text-align: center;
+            margin: 10px 0 5px 0;
+        }
+        .profile-card p {
+            text-align: center;
+            margin: 5px 0;
+            color: #fff;
+        }
+        .profile-card a {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            background-color: rgba(255,255,255,0.2);
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .profile-card a:hover {
+            background-color: rgba(255,255,255,0.4);
+        }
+        .profile-card.facebook { background-color: #1877f2; }
+        .profile-card.twitter { background-color: #000000; }
+        .profile-card.tiktok { background-color: #FE2C55; }
+        .profile-card.instagram {
+            background: radial-gradient(circle at 30% 30%, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+        }
+        .profile-card strong.counter {
+            font-size: 20px;
+            display: block;
+        }
+        /* --- END: Styles for Social Profiles Section --- */
+
+        /* --- Community Section --- */
+        #community {
+            background: linear-gradient(rgba(10, 25, 47, 0.8), rgba(10, 25, 47, 0.8)), url('https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80') no-repeat center center/cover;
+            background-attachment: fixed;
+            text-align: center;
+        }
+        #community .section-title { color: white; }
+        #community .community-text {
+            max-width: 700px;
+            margin: -20px auto 40px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+        .cta-button.facebook-btn {
+            background-color: var(--facebook-blue);
+            box-shadow: 0 4px 20px rgba(24, 119, 242, 0.4);
+        }
+        .cta-button.facebook-btn:hover {
+             box-shadow: 0 8px 30px rgba(24, 119, 242, 0.5);
+        }
+
+        /* --- START: Social Orbit Animation Styles --- */
+        #social .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .social-orbit {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            margin: 40px auto 0;
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: orbit-rotate 60s infinite linear;
+        }
+
+        .social-item {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            top: 50%;
+            left: 50%;
+            transform-origin: center;
+            text-decoration: none; /* Ensure link has no underline */
+        }
+
+        .social-item:nth-child(1) { --color: #FF0000; --angle: 0deg; }
+        .social-item:nth-child(2) { --color: #E1306C; --angle: 60deg; }
+        .social-item:nth-child(3) { --color: #4267B2; --angle: 120deg; }
+        .social-item:nth-child(4) { --color: #000000; --angle: 180deg; }
+        .social-item:nth-child(5) { --color: #1DA1F2; --angle: 240deg; }
+        .social-item:nth-child(6) { --color: #FFFC00; --angle: 300deg; }
+
+        .social-item {
+            transform: translate(-50%, -50%) rotate(var(--angle)) translate(250px) rotate(calc(-1 * var(--angle)));
+        }
+
+        .social-icon {
+            font-size: 30px;
+            color: white;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .social-name {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            font-family: 'Cairo', sans-serif;
+            opacity: 0;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 4px 10px;
+            border-radius: 12px;
+            color: white;
+        }
+
+        .social-item:hover {
+            background: var(--color);
+            transform: translate(-50%, -50%) rotate(var(--angle)) translate(250px) rotate(calc(-1 * var(--angle))) scale(1.2);
+            box-shadow: 0 0 30px var(--color);
+            z-index: 10;
+        }
+
+        .social-item:hover .social-icon {
+            transform: rotate(360deg) scale(1.5);
+            color: white;
+        }
+
+        .social-item:hover .social-name {
+            opacity: 1;
+            bottom: -30px;
+        }
+
+        .center-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.5);
+            animation: pulse 3s infinite alternate;
+            z-index: 5;
+        }
+        .center-logo i {
+            font-size: 40px;
+            color: white;
+        }
+
+        .floating-particles {
+            position: fixed; /* Changed to fixed to cover viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite linear;
+        }
+        /* --- END: Social Orbit Animation Styles --- */
+
+        /* --- Footer --- */
+        footer {
+            padding: 60px 20px 30px;
+            background-color: var(--card-bg);
+            text-align: center;
+        }
+        .copyright {
+            margin-top: 30px;
+            color: var(--text-muted);
+        }
+
+        /* --- Animations --- */
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes blink { 50% { opacity: 0; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes achievement-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } /* Renamed */
+        
+        /* New Animations from Social Orbit */
+        @keyframes orbit-rotate {
+            from { transform: rotate(0); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes pulse {
+            from { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 40px rgba(139, 92, 246, 0.5); }
+            to { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 60px rgba(139, 92, 246, 0.8); }
+        }
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+        
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 992px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 300px;
+                height: 100vh;
+                background-color: var(--card-bg);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transform: translateX(100%);
+                transition: transform 0.3s ease-in-out;
+            }
+            .nav-links.active { transform: translateX(0); }
+            .nav-links li { margin: 20px 0; }
+            .mobile-menu-btn {
+                display: block;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.8rem;
+                cursor: pointer;
+                z-index: 1001;
+            }
+            .about-content { grid-template-columns: 1fr; }
+            .about-image { order: -1; margin-bottom: 40px; }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3.5rem; }
+            .typing-container { font-size: 1.5rem; }
+            .section-title { font-size: 2.5rem; }
+
+            /* Social Orbit Responsive */
+            .social-orbit {
+                width: 350px;
+                height: 350px;
+            }
+            .social-item {
+                width: 60px;
+                height: 60px;
+                transform: translate(-50%, -50%) rotate(var(--angle)) translate(175px) rotate(calc(-1 * var(--angle)));
+            }
+            .social-item:hover {
+                transform: translate(-50%, -50%) rotate(var(--angle)) translate(175px) rotate(calc(-1 * var(--angle))) scale(1.2);
+            }
+            .social-icon {
+                font-size: 24px;
+            }
+            .center-logo {
+                width: 80px;
+                height: 80px;
+            }
+            .center-logo i {
+                font-size: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .social-orbit {
+                width: 280px;
+                height: 280px;
+            }
+            .social-item {
+                width: 50px;
+                height: 50px;
+                transform: translate(-50%, -50%) rotate(var(--angle)) translate(140px) rotate(calc(-1 * var(--angle)));
+            }
+            .social-item:hover {
+                transform: translate(-50%, -50%) rotate(var(--angle)) translate(140px) rotate(calc(-1 * var(--angle))) scale(1.2);
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+    
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">Ibn Hattuta</a>
+            <ul class="nav-links">
+                <li><a href="#about">عني</a></li>
+                <li><a href="#journey">رحلتي</a></li>
+                <li><a href="#social">التواصل</a></li>
+            </ul>
+            <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+    
+    <header class="hero">
+        <div class="hero-content">
+            <h1 id="typewriter"></h1><span class="typing-cursor"></span>
+            <div class="typing-container">مشرد حول العالم منذ 2015</div>
+            <p class="description">
+                نسافر لنستعيد الأمل الذي فقدناه، الأمل بالإنسان. نسافر لنكون أقرب من الشعوب، أقرب من الحقيقة، وأقرب لنا نحن.
+            </p>
+            <a href="https://www.ibnhattuta.com/" target="_blank" class="cta-button">اكتشف المزيد</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="section section-light" id="about">
+            <div class="section-divider">
+                <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                    <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+                </svg>
+            </div>
+            <div class="container">
+                <h2 class="section-title">عن الرحّالة</h2>
+                <div class="about-content">
+                    <div class="about-text fade-in-up">
+                        <blockquote>مرحباً، أنا قاسم الحتو. أهلاً بكم في مدونة ترحالي. بدأت رحلتي حول العالم سنة ٢٠١٧ تقريباً، بهدف التعرف على الشعوب والثقافات المختلفة، ووجدت طرقاً للسفر بأقل التكاليف وشاركتها معكم.</blockquote>
+                        <p><span class="highlight">ليس مجرد مسافر عادي.</span> قاسم (ابن حتوتة)، الأردني الفلسطيني، صاحب رؤية حوّل حب الترحال إلى فن. زار أكثر من <span class="highlight">100 دولة</span>، وكل خطوة له كانت لمسة فرشاة على لوحة كوكبنا.</p>
+                        <p>أسلوبه المميز في رواية القصص جذب ملايين الشغوفين باستكشاف العالم. مدونة ابن حتوتة ليست مجرد محتوى، بل هي دعوة لمغامرة تفتح في كل خطوة أفقاً جديداً.</p>
+                    </div>
+                    <div class="about-image fade-in-up">
+                        <img src="https://i.ibb.co/W8bCwFz/brav.png" alt="صورة ابن حتوتة">
+                    </div>
+                </div>
+                <div class="achievements">
+                    <div class="achievement-card fade-in-up">
+                        <div class="achievement-card-content">
+                            <div class="achievement-icon"><i class="fas fa-trophy"></i></div>
+                            <h3 class="achievement-title">فوربس 30 تحت 30</h3>
+                            <p class="achievement-desc">تم اختياره كواحد من أهم 30 شخصية تحت سن الـ 30 على مجلة فوربس العالمية لسنة 2024.</p>
+                        </div>
+                    </div>
+                    <div class="achievement-card fade-in-up">
+                        <div class="achievement-card-content">
+                            <div class="achievement-icon"><i class="fas fa-film"></i></div>
+                            <h3 class="achievement-title">برنامج سديم</h3>
+                            <p class="achievement-desc">وصل إلى نصف نهائي برنامج سديم الشهير.</p>
+                        </div>
+                    </div>
+                    <div class="achievement-card fade-in-up">
+                        <div class="achievement-card-content">
+                            <div class="achievement-icon"><i class="fas fa-graduation-cap"></i></div>
+                            <h3 class="achievement-title">التفوق الأكاديمي</h3>
+                            <p class="achievement-desc">تخرج الأول على دفعته في علوم الحاسوب بالجامعة الألمانية الأردنية.</p>
+                        </div>
+                    </div>
+                    <div class="achievement-card fade-in-up">
+                        <div class="achievement-card-content">
+                            <div class="achievement-icon"><i class="fas fa-users"></i></div>
+                            <h3 class="achievement-title">بصمة رقمية</h3>
+                            <p class="achievement-desc">تأثير واسع في أنحاء الوطن العربي، مع ملايين المتابعين والمشاهدات.</p>
+                        </div>
+                    </div>
+                    <div class="achievement-card fade-in-up">
+                        <div class="achievement-card-content">
+                            <div class="achievement-icon"><i class="fas fa-globe-africa"></i></div>
+                            <h3 class="achievement-title">الهدف العالمي</h3>
+                            <p class="achievement-desc">يسعى لتصوير فيديو من كل دولة في العالم، وقد أنجز أكثر من نصف المهمة.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="journey">
+            <div class="container">
+                <h2 class="section-title">إحصائيات الرحلة</h2>
+                <div class="journey-stats">
+                    <div class="stat-item fade-in-up">
+                        <div class="stat-number-wrapper">
+                            <span class="stat-prefix">أكثر من</span>
+                            <span class="stat-number" data-target="3.05">0</span>
+                        </div>
+                        <div class="stat-label">مليون مشترك</div>
+                    </div>
+                    <div class="stat-item fade-in-up">
+                        <div class="stat-number-wrapper">
+                             <span class="stat-prefix">أكثر من</span>
+                            <span class="stat-number" data-target="384">0</span>
+                        </div>
+                        <div class="stat-label">مليون مشاهدة</div>
+                    </div>
+                    <div class="stat-item fade-in-up">
+                        <div class="stat-number-wrapper">
+                             <span class="stat-prefix">أكثر من</span>
+                            <span class="stat-number" data-target="390">0</span>
+                        </div>
+                        <div class="stat-label">فيديو</div>
+                    </div>
+                     <div class="stat-item fade-in-up">
+                        <div class="stat-number-wrapper">
+                             <span class="stat-prefix">أكثر من</span>
+                            <span class="stat-number" data-target="100">0</span>
+                        </div>
+                        <div class="stat-label">دولة</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- START: New Social Profiles Section -->
+        <section class="section section-light" id="profiles">
+            <div class="container">
+                <h2 class="section-title">التواجد الرقمي</h2>
+                <div class="profiles-container">
+                    <!-- Facebook -->
+                    <div class="profile-card facebook fade-in-up">
+                        <img class="avatar" src="https://i.ibb.co/9HtTTGD7/ibn-facebook.jpg" alt="Facebook Profile">
+                        <h2>ابن حتوتة</h2>
+                        <p>اسمي قاسم الحتو، شخص عادي جدا وعندي هواية السفر</p>
+                        <p><strong class="counter" data-target="4100000">0</strong> متابع</p>
+                        <a href="https://www.facebook.com/ibnhattuta" target="_blank">زيارة فيسبوك</a>
+                    </div>
+                    <!-- Twitter X -->
+                    <div class="profile-card twitter fade-in-up">
+                        <img class="avatar" src="https://pbs.twimg.com/profile_images/1415578751031779330/RMSTPriZ_400x400.jpg" alt="Twitter Profile">
+                        <h2>ابن حتوتة</h2>
+                        <p>@IbnHattuta</p>
+                        <p>98 بلد للآن ✈️</p>
+                        <p><strong class="counter" data-target="146200">0</strong> متابع</p>
+                        <a href="https://x.com/IbnHattuta" target="_blank">زيارة تويتر X</a>
+                    </div>
+                    <!-- TikTok -->
+                    <div class="profile-card tiktok fade-in-up">
+                        <img class="avatar" src="https://i.ibb.co/wh19tW9g/ibn-tiktok.jpg" alt="TikTok Profile">
+                        <h2>ibnhattuta</h2>
+                        <p>مشرد بدوام كامل منذ 2017 ✈️</p>
+                        <p><strong class="counter" data-target="1600000">0</strong> متابع</p>
+                        <p><strong class="counter" data-target="11500000">0</strong> إعجاب</p>
+                        <a href="https://www.tiktok.com/@ibnhattuta" target="_blank">زيارة تيكتوك</a>
+                    </div>
+                    <!-- Instagram -->
+                    <div class="profile-card instagram fade-in-up">
+                        <img class="avatar" src="https://i.ibb.co/F4JMdFwG/ibn-instgram.jpg" alt="Instagram Profile">
+                        <h2>ibnhattuta</h2>
+                        <p>Kasem Hato ابن حتوتة</p>
+                        <p>يوتيوبر مشرد بدوام كامل منذ 2017 🧭</p>
+                        <p><strong class="counter" data-target="2300000">0</strong> متابع</p>
+                        <a href="https://www.instagram.com/ibnhattuta" target="_blank">زيارة إنستغرام</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- END: New Social Profiles Section -->
+
+        <section class="section" id="community">
+            <div class="container">
+                <h2 class="section-title fade-in-up">انضم إلى مجتمعنا</h2>
+                <p class="community-text fade-in-up">
+                    أسست مجتمع صغير للرحالة العرب على فيسبوك، "مجموعة مسافرون بلا حدود". إذا كانت لديك تجربة سفر تود مشاركتها أو ترغب في استلهام أفكار لرحلتك القادمة، فهذا هو مكانك.
+                </p>
+                <a href="https://www.facebook.com/groups/travelerswithoutborders" target="_blank" class="cta-button facebook-btn fade-in-up">
+                    <i class="fab fa-facebook-f" style="margin-left: 10px;"></i>
+                    انضم إلى المجموعة
+                </a>
+            </div>
+        </section>
+
+        <!-- START: New Animated Social Section -->
+        <section class="section" id="social">
+             <div class="container">
+                <h2 class="section-title">تابع المغامرة</h2>
+                <div class="social-orbit">
+                    <a href="https://www.youtube.com/@IBNHATTUTA" target="_blank" class="social-item">
+                        <i class="fab fa-youtube social-icon"></i>
+                        <span class="social-name">يوتيوب</span>
+                    </a>
+                    <a href="https://www.instagram.com/ibnhattuta" target="_blank" class="social-item">
+                        <i class="fab fa-instagram social-icon"></i>
+                        <span class="social-name">انستغرام</span>
+                    </a>
+                    <a href="https://www.facebook.com/ibnhattuta" target="_blank" class="social-item">
+                        <i class="fab fa-facebook-f social-icon"></i>
+                        <span class="social-name">فيسبوك</span>
+                    </a>
+                    <a href="https://www.tiktok.com/@ibnhattuta" target="_blank" class="social-item">
+                        <i class="fab fa-tiktok social-icon"></i>
+                        <span class="social-name">تيك توك</span>
+                    </a>
+                    <a href="https://twitter.com/ibnhattuta" target="_blank" class="social-item">
+                        <i class="fab fa-twitter social-icon"></i>
+                        <span class="social-name">تويتر</span>
+                    </a>
+                    <a href="https://story.snapchat.com/p/44eeea7e-1982-4994-88d5-878656ff7aac/1822089331902464" target="_blank" class="social-item">
+                        <i class="fab fa-snapchat social-icon"></i>
+                        <span class="social-name">سناب شات</span>
+                    </a>
+                    <div class="center-logo">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                </div>
+             </div>
+        </section>
+        <!-- END: New Animated Social Section -->
+    </main>
+
+    <footer>
+        <div class="container">
+            <a href="#" class="logo">Ibn Hattuta Travels</a>
+            <p style="margin: 20px 0; color: var(--text-muted); font-size: 18px; font-weight: bold;">للتواصل التجاري: info@ibnhattuta.com</p>
+            <div style="margin: 25px 0; line-height: 1.6; color: var(--text-muted); text-align: center;">
+                <p>ــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ</p>
+                <p style="margin: 15px 0; font-style: italic; color: #666;"> 
+                    صُنع بكل فخر وحب من متابع معجب ومحب بمغامرات ابن حتوتة 🗺️ | © 2025 
+                </p>
+                <!-- START: Page View Counter -->
+                <p style="margin: 15px 0; color: var(--text-light);">عدد زياراتك لهذه الصفحة: <span id="page-views">0</span></p>
+                <!-- END: Page View Counter -->
+                <p style="font-size: 1em; margin: 15px 0; color: #888; font-weight: 500;">
+                    🌟 6 سنوات من دعم المغامرات (متابع منذ 2018) 🌟
+                </p>
+                <p style="font-size: 0.9em; margin: 10px 0; color: #777;">
+                    © 2018 Ibn Hattuta Travels. هذه الصفحة مقدمة من معجبين
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="floating-particles" id="particles"></div>
+
+    <script>
+        // --- Preloader ---
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            preloader.classList.add('hidden');
+        });
+        
+        // --- START: Page View Counter Script ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const viewsElement = document.getElementById('page-views');
+            if (viewsElement) {
+                let viewCount = localStorage.getItem('ibnHattutaPageViewCount');
+
+                if (viewCount) {
+                    viewCount = Number(viewCount) + 1;
+                } else {
+                    viewCount = 1;
+                }
+
+                localStorage.setItem('ibnHattutaPageViewCount', viewCount);
+                viewsElement.textContent = viewCount;
+            }
+        });
+        // --- END: Page View Counter Script ---
+
+        // --- Navbar Scroll Effect ---
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // --- Mobile Menu ---
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        const navLinksItems = document.querySelectorAll('.nav-links a');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = mobileMenuBtn.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        navLinksItems.forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+                    mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+                }
+            });
+        });
+
+        // --- Typewriter Effect ---
+        const typewriterElement = document.getElementById('typewriter');
+        const textToType = "ابن حتوتة";
+        let index = 0;
+        function type() {
+            if (index < textToType.length) {
+                typewriterElement.innerHTML += textToType.charAt(index);
+                index++;
+                setTimeout(type, 150);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', type);
+
+        // --- Intersection Observer for Animations ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            observer.observe(el);
+        });
+
+        // --- Counter Animation ---
+        const statsObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counters = entry.target.querySelectorAll('.stat-number');
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        const duration = 2000;
+                        const frameRate = 60;
+                        const totalFrames = Math.round((duration / 1000) * frameRate);
+                        const increment = target / totalFrames;
+                        let current = 0;
+
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                clearInterval(timer);
+                                current = target;
+                            }
+                            
+                            if (target % 1 !== 0) {
+                                counter.innerText = current.toFixed(2);
+                            } else {
+                                counter.innerText = Math.floor(current).toLocaleString();
+                            }
+                        }, duration / totalFrames);
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        statsObserver.observe(document.querySelector('.journey-stats'));
+
+        // --- START: Counter for Social Profile Cards ---
+        const profilesObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counters = entry.target.querySelectorAll('.counter');
+                    counters.forEach(counter => {
+                        // Prevent re-animating
+                        if (counter.classList.contains('animated')) return;
+                        counter.classList.add('animated');
+
+                        const target = +counter.getAttribute('data-target');
+                        let count = 0;
+                        const increment = target / 100; // Animate over ~100 frames
+                        
+                        const updateCounter = () => {
+                            count += increment;
+                            if (count < target) {
+                                if (target >= 1000000) {
+                                    counter.innerText = (count / 1000000).toFixed(1) + 'M';
+                                } else if (target >= 1000) {
+                                    counter.innerText = Math.floor(count / 1000) + 'K';
+                                } else {
+                                    counter.innerText = Math.floor(count);
+                                }
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                if (target >= 1000000) {
+                                    counter.innerText = (target / 1000000).toFixed(1) + 'M';
+                                } else if (target >= 1000) {
+                                    counter.innerText = (Math.floor(target / 1000)) + 'K';
+                                } else {
+                                    counter.innerText = target.toLocaleString();
+                                }
+                            }
+                        };
+                        updateCounter();
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        if (document.querySelector('.profiles-container')) {
+            profilesObserver.observe(document.querySelector('.profiles-container'));
+        }
+        // --- END: Counter for Social Profile Cards ---
+
+
+        // --- START: Scripts for Social Orbit ---
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 50;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            
+            const size = Math.random() * 4 + 1;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            particle.style.animationDelay = `${Math.random() * 15}s`;
+            particle.style.animationDuration = `${15 + Math.random() * 10}s`;
+            
+            particlesContainer.appendChild(particle);
+        }
+
+        document.querySelectorAll('.social-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const centerLogo = document.querySelector('.center-logo');
+                if(centerLogo) {
+                    centerLogo.style.animation = 'none';
+                    setTimeout(() => {
+                        centerLogo.style.animation = 'pulse 3s infinite alternate';
+                    }, 10);
+                }
+            });
+        });
+        // --- END: New Scripts for Social Orbit ---
+    </script>
+</body>
+</html>
